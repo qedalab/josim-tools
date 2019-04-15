@@ -1,0 +1,2 @@
+[MASTER]
+disable=bad-continuation,len-as-condition,too-few-public-methods

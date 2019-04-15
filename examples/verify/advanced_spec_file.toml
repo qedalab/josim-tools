@@ -1,0 +1,7 @@
+mode = "verify"
+
+[verify]
+method = "spec_file"
+circuit = "data/test_splitt_changed_sym.js"
+file = "data/test_splitt_changed_sym.sp"
+threshold = 0.03
