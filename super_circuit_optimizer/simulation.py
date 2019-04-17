@@ -49,11 +49,15 @@ class CircuitSimulator:
         phase_mode: bool = False
     ):
         self.circuit_path_ = circuit_path
-        self.parameter_names_ = parameter_names
-        self.trace_names_ = trace_names
         self.phase_mode_ = phase_mode
 
         self.input_ = self._load_input()
+
+        self.parameter_names_ = parameter_names
+
+        self.trace_names_: List[str] = []
+        if trace_names is not None:
+            self.change_traces(trace_names)
 
     def _load_input(self) -> Input:
         input_type = InputType.Jsim
@@ -70,8 +74,6 @@ class CircuitSimulator:
 
         input_object.expand_subcircuits()
         input_object.expand_maindesign()
-
-        # TODO ensure that parameters exists
 
         return input_object
 
@@ -95,6 +97,8 @@ class CircuitSimulator:
         tmp_input.parse_parameters()
         simulation.identify_simulation(tmp_input)
         matrix.create_matrix(tmp_input)
+
+        matrix.find_relevant_x(tmp_input)
 
         # Run simulation
         if self.phase_mode_:
@@ -144,11 +148,16 @@ class CircuitSimulator:
 
     def change_traces(self, trace_names: List[str]) -> None:
         """ Modify the traces that are output by simulate """
+        if self.trace_names_ == trace_names:
+            return
+
         self.trace_names_ = trace_names
+
+        self.input_.clear_plots()
+
+        for trace_name in self.trace_names_:
+            self.input_.add_plot("PHASE " + trace_name)
 
     def change_parameters(self, parameter_names: List[str]) -> None:
         """ Modify the parameters that are modified """
         self.parameter_names_ = parameter_names
-
-    def all_parameters(self) -> List[str]:
-        raise NotImplementedError("CircuitSimulator::all_parameters")

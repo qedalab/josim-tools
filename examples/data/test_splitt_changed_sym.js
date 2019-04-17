@@ -212,11 +212,4 @@ X0tx2      MITLL_PTLTX 2          17
 XDCSFQIN   MITLL_DCSFQ 1          2
 .model jjmitll100 jj(rtype=1, vg=2.8mV, cap=0.07pF, r0=160, rn=16, icrit=0.1mA)
 .tran 0.1p 400p 0 0.1p
-.print phase B01tx1
-.print phase B01tx2
-.print phase B1
-.print phase B2
-.print phase B3
-.print phase X0rx_B03
-.print phase X0rx2_B03
 .end

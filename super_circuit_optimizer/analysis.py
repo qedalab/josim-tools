@@ -15,7 +15,6 @@ from .configuration import (
     VerifyConfiguration,
     MarginAnalysisConfiguration,
     MarginParameterConfiguration,
-    YieldAnalysisConfiguration,
     YieldParameterConfiguration,
 )
 
@@ -96,6 +95,8 @@ class YieldAnalysis(Yield):
 
     verify_configuration_: VerifyConfiguration
 
+    seed_: int
+
     def __init__(
         self,
         verify_config: VerifyConfiguration,
@@ -109,13 +110,14 @@ class YieldAnalysis(Yield):
         self.distributions_ = distributions
         self.verify_configuration_ = verify_config
 
+        self.seed_ = int(time())
+
     def _work(self, num_samples: int) -> Tuple[int, int]:
         """ Do a number of samples returning number of success and failures """
 
         # Random seed
-        tmp_a = int(time())
-        tmp_b = current_process().pid
-        seed(tmp_a + tmp_b + (tmp_a ^ tmp_b))
+        pid = current_process().pid
+        seed(self.seed_ + pid)
 
         # Lazily create verifier
         if self.verifier_ is None:
