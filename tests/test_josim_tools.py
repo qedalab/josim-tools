@@ -1,4 +1,4 @@
-from super_circuit_optimizer import __version__
+from josim_tools import __version__
 
 
 def test_version():

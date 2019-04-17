@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "super_circuit_optimizer"
+name = "josim_tools"
 version = "0.1.0"
 description = ""
 authors = ["Paul le Roux <pleroux0@outlook.com>"]
@@ -20,7 +20,7 @@ typing_extensions = "^3.7.2"
 pytest = "^3.0"
 
 [tool.poetry.scripts]
-'josim-tools' = 'super_circuit_optimizer.tools:run'
+'josim-tools' = 'josim_tools.tools:run'
 
 [tool.black]
 line-length = 88

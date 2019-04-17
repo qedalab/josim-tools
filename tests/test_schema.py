@@ -7,7 +7,7 @@ from jsonschema.validators import (
     validate as schema_validate,
 )
 
-from super_circuit_optimizer.schema import (
+from josim_tools.schema import (
     VERIFY,
     MARGIN,
     MARGIN_PARAMETER,

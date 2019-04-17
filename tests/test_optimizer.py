@@ -3,7 +3,7 @@
 import pytest
 import numpy as np
 
-from super_circuit_optimizer.optimize import NumpyVectorArray
+from josim_tools.optimize import NumpyVectorArray
 
 
 def test_numpy_vector_array():
