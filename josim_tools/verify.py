@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from .formats import SpecFile
-from .simulation import CircuitSimulator, CircuitSimulatorOuput
+from .simulation import CircuitSimulator, CircuitSimulatorOuput, PlotParameter
 from .configuration import VerifyConfiguration
 
 
@@ -25,7 +25,8 @@ class Verifier:
 
         # Set traces to be in the right order
         names: List[str] = self.spec_file_.names()
-        self.simulator_.change_traces(names)
+        plot_parameters = [PlotParameter(name) for name in names]
+        self.simulator_.change_traces(plot_parameters)
 
     def _simulate(self, params: Dict[str, float]) -> CircuitSimulatorOuput:
         parameters: List[str] = []

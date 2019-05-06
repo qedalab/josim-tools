@@ -3,7 +3,9 @@
 from typing import List, Optional
 from numpy import interp
 
-from pyjosim.input import CliOptions, Input, AnalysisType, InputType
+import attr
+
+from pyjosim.input import Input, AnalysisType, InputType
 from pyjosim.matrix import Matrix
 from pyjosim.output import Output, Trace
 from pyjosim.simulation import Simulation
@@ -12,8 +14,9 @@ from pyjosim.simulation import Simulation
 class CircuitSimulatorOuput:
     """ Property class for output of Simulation objects """
     traces_: List[Trace]
+    time_steps_: List[float]
 
-    def __init__(self, time_steps, traces):
+    def __init__(self, time_steps, traces: List[Trace]):
         self.time_steps_ = time_steps
         self.traces_ = traces
 
@@ -38,6 +41,29 @@ class CircuitSimulatorOuput:
         return samples
 
 
+@attr.s(auto_attribs=True, frozen=True, slots=True)
+class PlotParameter:
+    """ Plot parameter """
+    parameter: str
+    plot_type: str = "PHASE"
+
+    def to_plot_string(self) -> str:
+        """ Convert the plot parameter to a string """
+        return "{} {}".format(self.plot_type, self.parameter)
+
+    def to_trace_name(self) -> str:
+        """ Convert plot parameter to trace name """
+
+        if self.plot_type == "PHASE":
+            return self.parameter
+
+        if self.plot_type == "NODEV":
+            return "NV_{}".format(self.parameter)
+
+        assert False
+        raise RuntimeError("Assert: Unreachable code")
+
+
 class CircuitSimulator:
     """ Class that handles circuit simulation """
 
@@ -45,7 +71,7 @@ class CircuitSimulator:
         self,
         circuit_path: str,
         parameter_names: List[str],
-        trace_names: Optional[List[str]] = None,
+        plot_parameters: Optional[List[PlotParameter]] = None,
         phase_mode: bool = False
     ):
         self.circuit_path_ = circuit_path
@@ -55,9 +81,9 @@ class CircuitSimulator:
 
         self.parameter_names_ = parameter_names
 
-        self.trace_names_: List[str] = []
-        if trace_names is not None:
-            self.change_traces(trace_names)
+        self.plot_parameters_: List[PlotParameter] = []
+        if plot_parameters is not None:
+            self.change_traces(plot_parameters)
 
     def _load_input(self) -> Input:
         input_type = InputType.Jsim
@@ -121,12 +147,14 @@ class CircuitSimulator:
 
         output_traces = []
 
-        if self.trace_names_ is None:
+        if self.parameter_names_ is None:
             for trace in traces:
                 output_traces.append(trace)
             return CircuitSimulatorOuput(time_steps, output_traces)
 
-        for trace_name in self.trace_names_:
+        for plot_parameter in self.plot_parameters_:
+            trace_name = plot_parameter.to_trace_name()
+
             found: bool = False
             for trace in traces:
                 if trace.name == trace_name:
@@ -146,17 +174,17 @@ class CircuitSimulator:
 
         return CircuitSimulatorOuput(time_steps, output_traces)
 
-    def change_traces(self, trace_names: List[str]) -> None:
+    def change_traces(self, plot_parameters: List[PlotParameter]) -> None:
         """ Modify the traces that are output by simulate """
-        if self.trace_names_ == trace_names:
+        if self.plot_parameters_ == plot_parameters:
             return
 
-        self.trace_names_ = trace_names
+        self.plot_parameters_ = plot_parameters
 
         self.input_.clear_plots()
 
-        for trace_name in self.trace_names_:
-            self.input_.add_plot("PHASE " + trace_name)
+        for plot_parameter in self.plot_parameters_:
+            self.input_.add_plot(plot_parameter.to_plot_string())
 
     def change_parameters(self, parameter_names: List[str]) -> None:
         """ Modify the parameters that are modified """
