@@ -1,0 +1,11 @@
+mode = "margin"
+
+[parameters]
+Btotal = {"nominal" = 0.97147707}
+Ltotal = {"nominal" = 0.94654473}
+Itotal = {"nominal" = 1.03305609}
+
+[verify]
+method = "spec_file"
+circuit = "data/test_splitt_changed_sym.js"
+file = "data/test_splitt_changed_sym.sp"
