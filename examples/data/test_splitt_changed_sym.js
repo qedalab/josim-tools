@@ -7,41 +7,76 @@
 *********************************************************
 *vvvvvvvv  Included SPICE model from ./js/mitll_dcsfq.js vvvvvvvv
 
+* Process parameters
 .param B0=1
-.param Itotal=1
-.param Btotal=1
-.param Ltotal=1
 .param Ic0=0.1m
 .param IcRs=100u*6.859904418
 .param B0Rs=IcRs/Ic0*B0
 
-.param B01rx2=Btotal*1
-.param B01tx1=Btotal*2
-.param B1=Btotal*3.25
-.param B2=Btotal*2.5
-.param IB01rx2=Itotal*155u
-.param IB01tx1=Itotal*130u
-.param IB1=Itotal*569u
-.param L01_rx2=Ltotal*0.2p
-.param L01_tx1=Ltotal*2.5p
-.param L02_tx1=Ltotal*3.3p
-.param L03_tx1=Ltotal*8p
-.param L1=Ltotal*1.4p
-.param L2=Ltotal*2p
-.param L3=Ltotal*0.4p
-.param L4=Ltotal*1.9p
-.param L5=Ltotal*2p
-.param LP01_rx2=Ltotal*0.34p
-.param LP01_tx1=Ltotal*0.05p
-.param LP1=Ltotal*0.2p
-.param LP2=Ltotal*0.2p
-.param LP_IB1=Ltotal*0.2p
-.param LPR01_rx2=Ltotal*0.2p
-.param LPR01_tx1=Ltotal*0.2p
-.param LRB01rx2=Ltotal*0.5p
-.param LRB01tx1=Ltotal*1p
-.param LRB1=Ltotal*1p
-.param LRB2=Ltotal*1p
+* Global variations
+.param Itotal=1
+.param Btotal=1
+.param Ltotal=1
+
+* Nominal parameters
+.param B01rx2_unscaled=1
+.param B01tx1_unscaled=2
+.param B1_unscaled=3.25
+.param B2_unscaled=2.5
+.param IB01rx2_unscaled=155u
+.param IB01tx1_unscaled=130u
+.param IB1_unscaled=569u
+.param L01_rx2_unscaled=0.2p
+.param L01_tx1_unscaled=2.5p
+.param L02_tx1_unscaled=3.3p
+.param L03_tx1_unscaled=8p
+.param L1_unscaled=1.4p
+.param L2_unscaled=2p
+.param L3_unscaled=0.4p
+.param L4_unscaled=1.9p
+.param L5_unscaled=2p
+.param LP01_rx2_unscaled=0.34p
+.param LP01_tx1_unscaled=0.05p
+.param LP1_unscaled=0.2p
+.param LP2_unscaled=0.2p
+.param LP_IB1_unscaled=0.2p
+.param LPR01_rx2_unscaled=0.2p
+.param LPR01_tx1_unscaled=0.2p
+.param LRB01rx2_unscaled=0.5p
+.param LRB01tx1_unscaled=1p
+.param LRB1_unscaled=1p
+.param LRB2_unscaled=1p
+
+* Parameterized values
+.param B01rx2=Btotal*B01rx2_unscaled
+.param B01tx1=Btotal*B01tx1_unscaled
+.param B1=Btotal*B1_unscaled
+.param B2=Btotal*B2_unscaled
+.param IB01rx2=Itotal*IB01rx2_unscaled
+.param IB01tx1=Itotal*IB01tx1_unscaled
+.param IB1=Itotal*IB1_unscaled
+.param L01_rx2=Ltotal*L01_rx2_unscaled
+.param L01_tx1=Ltotal*L01_tx1_unscaled
+.param L02_tx1=Ltotal*L02_tx1_unscaled
+.param L03_tx1=Ltotal*L03_tx1_unscaled
+.param L1=Ltotal*L1_unscaled
+.param L2=Ltotal*L2_unscaled
+.param L3=Ltotal*L3_unscaled
+.param L4=Ltotal*L4_unscaled
+.param L5=Ltotal*L5_unscaled
+.param LP01_rx2=Ltotal*LP01_rx2_unscaled
+.param LP01_tx1=Ltotal*LP01_tx1_unscaled
+.param LP1=Ltotal*LP1_unscaled
+.param LP2=Ltotal*LP2_unscaled
+.param LP_IB1=Ltotal*LP_IB1_unscaled
+.param LPR01_rx2=Ltotal*LPR01_rx2_unscaled
+.param LPR01_tx1=Ltotal*LPR01_tx1_unscaled
+.param LRB01rx2=Ltotal*LRB01rx2_unscaled
+.param LRB01tx1=Ltotal*LRB01tx1_unscaled
+.param LRB1=Ltotal*LRB1_unscaled
+.param LRB2=Ltotal*LRB2_unscaled
+
+* Bias currents
 .param RB01rx2=B0Rs/B01rx2
 .param RB01tx1=B0Rs/B01tx1
 .param RB1=B0Rs/B1
@@ -50,11 +85,11 @@
 *****************************************
 * Begin .SUBCKT model                   *
 * spice-sdb ver 4.28.2007               *
-*                                       * 
+*                                       *
 * RSFQ generic cell for MITLL sfq5ee    *
 * Authored 3 Nov 2015, CJ Fourie, SU    *
 *****************************************
-.SUBCKT mitll_dcsfq 8 11 
+.SUBCKT mitll_dcsfq 8 11
 *==============  Begin SPICE netlist of main design ============
 B1         1          2          jjmitll100 area=2.25
 B2         3          4          jjmitll100 area=2.25
@@ -91,7 +126,7 @@ RB3        5          12         3.88
 * Last mod 16 Oct 2016, CJ Fourie, SU    *
 *   (Optimized)                          *
 ******************************************
-.SUBCKT MITLL_PTLTX 1 2 
+.SUBCKT MITLL_PTLTX 1 2
 *==============  Begin SPICE netlist of main design ============
 B01        3          7          jmitll     area=2
 B02        4          6          jmitll     area=1.62
@@ -125,7 +160,7 @@ RINS       5          2          1.36
 * Last mod 16 Oct 2016, CJ Fourie, SU    *
 *   (Optimized)                          *
 ******************************************
-.SUBCKT MITLL_PTLRX 2 6 
+.SUBCKT MITLL_PTLRX 2 6
 *==============  Begin SPICE netlist of main design ============
 B01        1          9          jmitll     area=1
 B02        4          8          jmitll     area=1
@@ -212,4 +247,10 @@ X0tx2      MITLL_PTLTX 2          17
 XDCSFQIN   MITLL_DCSFQ 1          2
 .model jjmitll100 jj(rtype=1, vg=2.8mV, cap=0.07pF, r0=160, rn=16, icrit=0.1mA)
 .tran 0.1p 400p 0 0.1p
+
+.print DEVP IIN
+.print DEVP B01rx2
+.print DEVP B01tx1
+.print DEVP B01tx2
+
 .end
