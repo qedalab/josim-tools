@@ -13,6 +13,7 @@ from pyjosim.simulation import Simulation
 
 class CircuitSimulatorOuput:
     """ Property class for output of Simulation objects """
+
     traces_: List[Trace]
     time_steps_: List[float]
 
@@ -44,21 +45,26 @@ class CircuitSimulatorOuput:
 @attr.s(auto_attribs=True, frozen=True, slots=True)
 class PlotParameter:
     """ Plot parameter """
+
     parameter: str
     plot_type: str = "PHASE"
 
     def to_plot_string(self) -> str:
         """ Convert the plot parameter to a string """
-        return "{} {}".format(self.plot_type, self.parameter)
+        return "{} {}".format(self.plot_type.upper(), self.parameter.upper())
 
     def to_trace_name(self) -> str:
         """ Convert plot parameter to trace name """
 
-        if self.plot_type == "PHASE":
-            return self.parameter
+        if (
+            self.plot_type == "PHASE"
+            or self.plot_type == "DEVI"
+            or self.plot_type == "DEVV"
+        ):
+            return self.parameter.upper()
 
         if self.plot_type == "NODEV":
-            return "NV_{}".format(self.parameter)
+            return "NV_{}".format(self.parameter.upper())
 
         assert False
         raise RuntimeError("Assert: Unreachable code")
@@ -72,7 +78,7 @@ class CircuitSimulator:
         circuit_path: str,
         parameter_names: List[str],
         plot_parameters: Optional[List[PlotParameter]] = None,
-        phase_mode: bool = False
+        phase_mode: bool = False,
     ):
         self.circuit_path_ = circuit_path
         self.phase_mode_ = phase_mode
@@ -167,9 +173,7 @@ class CircuitSimulator:
 
             raise RuntimeError(
                 "Trace name not found in simulation output\n"
-                "{} not in {}".format(
-                    trace_name, [trace.name for trace in traces]
-                )
+                "{} not in {}".format(trace_name, [trace.name for trace in traces])
             )
 
         return CircuitSimulatorOuput(time_steps, output_traces)
