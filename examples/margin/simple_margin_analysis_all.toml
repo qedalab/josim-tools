@@ -1,0 +1,48 @@
+mode = "margin"
+
+[parameters]
+
+#Globals
+Btotal = {"nominal" = 1}
+Ltotal = {"nominal" = 1}
+Itotal = {"nominal" = 1}
+
+# Junctions
+B01rx2_unscaled = {"nominal" = 1}
+B01tx1_unscaled = {"nominal" = 2}
+B1_unscaled = {"nominal" = 3.25}
+B2_unscaled = {"nominal" = 2.5}
+
+# Currents
+IB01rx2_unscaled = {"nominal" = 155e-6}
+IB01tx1_unscaled = {"nominal" = 130e-6}
+IB1_unscaled = {"nominal" = 569e-6}
+
+# Inductors
+L01_rx2_unscaled = {"nominal" = 0.2e-12}
+L01_tx1_unscaled = {"nominal" = 2.5e-12}
+L02_tx1_unscaled = {"nominal" = 3.3e-12}
+L03_tx1_unscaled = {"nominal" = 8e-12}
+L1_unscaled = {"nominal" = 1.4e-12}
+L2_unscaled = {"nominal" = 2e-12}
+L3_unscaled = {"nominal" = 0.4e-12}
+L4_unscaled = {"nominal" = 1.9e-12}
+L5_unscaled = {"nominal" = 2e-12}
+
+# Parasitic inductors
+LP01_rx2_unscaled = {"nominal" = 0.34e-12}
+LP01_tx1_unscaled = {"nominal" = 0.05e-12}
+LP1_unscaled = {"nominal" = 0.2e-12}
+LP2_unscaled = {"nominal" = 0.2e-12}
+LP_IB1_unscaled = {"nominal" = 0.2e-12}
+LPR01_rx2_unscaled = {"nominal" = 0.2e-12}
+LPR01_tx1_unscaled = {"nominal" = 0.2e-12}
+LRB01rx2_unscaled = {"nominal" = 0.5e-12}
+LRB01tx1_unscaled = {"nominal" = 1e-12}
+LRB1_unscaled = {"nominal" = 1e-12}
+LRB2_unscaled = {"nominal" = 1e-12}
+
+[verify]
+method = "spec_file"
+circuit = "data/test_splitt_changed_sym.js"
+file = "data/test_splitt_changed_sym.sp"

@@ -1,0 +1,17 @@
+mode = "optimize"
+
+[optimize]
+method = "hybrid"
+search_radius = 0.05
+converge = 0.01
+max_iterations = 500
+
+[parameters]
+Btotal = {nominal = 0.5, min=0.5, max=1.5}
+Ltotal = {nominal = 1, min=0.5, max=1.5}
+Itotal = {nominal = 0.5, min=0.5, max=1.5}
+
+[verify]
+method = "spec_file"
+circuit = "data/test_splitt_changed_sym.js"
+file = "data/test_splitt_changed_sym.sp"

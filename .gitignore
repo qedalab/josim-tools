@@ -1,0 +1,5 @@
+pip-wheel-metadata
+*.egg-info
+.python-version
+.mypy_cache
+__pycache__
