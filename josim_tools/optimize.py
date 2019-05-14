@@ -390,13 +390,13 @@ class Optimizer:
             next_guess = self._next_guess(best_point)
             estimated_score = float(self._score(next_guess))
 
-            print(next_guess, estimated_score)
-
             print("Verifying next guess")
             next_guess_dict = self._array_to_dict(next_guess)
             valid: bool = self.margin_analysis_.verifier_.verify(next_guess_dict)
 
             if not valid:
+                print("Adding invalid guess to known points of failure")
+                self.state_.add_point_of_failure(next_guess)
                 print("Skipping analysis of invalid point")
                 continue
 
@@ -410,6 +410,9 @@ class Optimizer:
             if estimation_error < self.converge_:
                 print("Convergence reached")
                 break
+
+        if iteration >= self.max_iterations_:
+            print("Reached maximum number of iterations")
 
         optimized_point = self._best_point()
         optimized_score = float(self._score(optimized_point))
