@@ -212,7 +212,7 @@ class MarginAnalysis:
         scan_step_size: float = (search_to - search_from) / self.scan_steps
         scan_stop = False
 
-        for i in range(1, self.scan_steps):
+        for i in range(1, self.scan_steps + 1):
             current: float = 1 + i * scan_step_size
             all_params[variable] = value * current
 
@@ -324,7 +324,8 @@ def print_margin_analysis_result(
     if screen_col is None:
         screen_col = get_terminal_size((80, 1)).columns
 
-    unusabled_chars = 15 + max([len(i) for i in result.keys()])
+    max_key_size = max([len(i) for i in result.keys()])
+    unusabled_chars = 15 + max_key_size
 
     usable_chars = screen_col - unusabled_chars
 
@@ -383,7 +384,7 @@ def print_margin_analysis_result(
     for key, item in result.items():
         print(
             "{key}: {adjust}{left:>4.1f} [{bar_left}|{bar_right}] {right:>4.1f}".format(
-                key=key,
+                key=key.ljust(max_key_size),
                 adjust=adjust,
                 left=item[0],
                 bar_left=bar(item[0], bar_left, True),
