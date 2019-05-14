@@ -3,8 +3,8 @@ mode = "margin"
 [margin]
 max_search = 1.9
 min_search = 0.1
-scan_steps = 4
-binary_search_steps = 3
+scan_steps = 3
+binary_search_steps = 10
 
 [parameters]
 Btotal = {"nominal" = 1}
