@@ -1,0 +1,29 @@
+mode="yield"
+
+[parameters]
+Itotal = {nominal = 1, variance=0.2}
+Jtotal = {nominal = 1, variance=0.2}
+Ltotal = {nominal = 1, variance=0.2}
+Rtotal = {nominal = 1, variance=0.2}
+LD_margin = {nominal = 1, variance=0.2}
+LQ_margin = {nominal = 1, variance=0.2}
+LO_margin = {nominal = 1, variance=0.2}
+LREL_margin = {nominal = 1, variance=0.2}
+J1_margin = {nominal = 1, variance=0.2}
+J2_margin = {nominal = 1, variance=0.2}
+J3_margin = {nominal = 1, variance=0.2}
+J4_margin = {nominal = 1, variance=0.2}
+I1_margin = {nominal = 1, variance=0.2}
+RJ1_margin = {nominal = 1, variance=0.2}
+RJ2_margin = {nominal = 1, variance=0.2}
+RJ3_margin = {nominal = 1, variance=0.2}
+RJ4_margin = {nominal = 1, variance=0.2}
+
+[yield]
+num_samples = 16384
+
+[verify]
+method="spec_file"
+circuit="dff_cowboy_optimized.cir"
+file="dff_specification.sp"
+threshold=0.2

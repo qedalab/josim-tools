@@ -1,0 +1,16 @@
+site_name: JoSIM Tools Documentation
+theme: material
+site_dir: build/mkdocs
+
+extra_javascript:
+    - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+
+markdown_extensions:
+  - pymdownx.magiclink:
+      repo_url_shorthand: True
+      repo_url_shortener: True
+      hide_protocol: True
+  - pymdownx.superfences:
+      highlight_code: True
+  - pymdownx.highlight
+  - mdx_mathjax

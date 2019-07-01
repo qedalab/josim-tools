@@ -1,7 +1,7 @@
 """ Module that contains the yield information """
 from typing import Dict, Tuple, Optional, List
 from copy import deepcopy
-from math import floor, isclose
+from math import floor
 from shutil import get_terminal_size
 from multiprocessing.pool import Pool
 from multiprocessing import current_process

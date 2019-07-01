@@ -1,0 +1,31 @@
+mode="optimize"
+
+[optimize]
+method="hybrid"
+search_radius=0.15
+max_iterations=10000
+
+[parameters]
+Itotal = {nominal = 1, min=1, max=1}
+Jtotal = {nominal = 1, min=1, max=1}
+Ltotal = {nominal = 1, min=1, max=1}
+Rtotal = {nominal = 1, min=1, max=1}
+LD_margin = {nominal = 1, min=0.2, max=2}
+LQ_margin = {nominal = 1, min=0.2, max=2}
+LO_margin = {nominal = 1, min=0.2, max=2}
+LREL_margin = {nominal = 1, min=0.2, max=2}
+J1_margin = {nominal = 1, min=0.5, max=1.5}
+J2_margin = {nominal = 1, min=0.5, max=1.5}
+J3_margin = {nominal = 1, min=0.5, max=1.5}
+J4_margin = {nominal = 1, min=0.5, max=1.5}
+I1_margin = {nominal = 1, min=0.5, max=1.5}
+
+[margin]
+binary_search_steps=12
+scan_steps=2
+
+[verify]
+method="spec_file"
+circuit="dff_starting_values.cir"
+file="dff_specification.sp"
+threshold=0.2

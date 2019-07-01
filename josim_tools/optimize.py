@@ -11,7 +11,7 @@ from .configuration import (
     VerifyConfiguration,
     MarginAnalysisConfiguration,
     OptimizeConfiguration,
-    OptimizerParameterConfiguration
+    OptimizerParameterConfiguration,
 )
 from .analysis import MarginAnalysis, print_margin_analysis_result
 
@@ -201,9 +201,7 @@ class Optimizer:
         optimize_config: OptimizeConfiguration,
         optimize_parameters: Dict[str, OptimizerParameterConfiguration],
     ):
-        self.margin_analysis_ = MarginAnalysis(
-            verify_config, margin_config
-        )
+        self.margin_analysis_ = MarginAnalysis(verify_config, margin_config)
 
         self.converge_ = optimize_config.converge
         self.search_radius_ = optimize_config.search_radius
@@ -238,7 +236,7 @@ class Optimizer:
         print("  Adding point to list of guesses")
         self.state_.add_guess(data)
 
-        print("  Doing margin analysis of point: ")
+        print("  Doing margin analysis of point:")
         print()
 
         margin_output = self.margin_analysis_.analyse(point, self.num_margin_threads_)
@@ -323,7 +321,7 @@ class Optimizer:
         print("  Computing guess boundaries")
         guess_boundaries = self._get_guess_boundaries(current_best_point)
 
-        print("  Starting differential evolution routine")
+        print("  Starting differential evolution routine", flush=True)
         # result: OptimizeResult = differential_evolution(
         #     self._score, guess_boundaries, workers=-1
         # )
@@ -339,7 +337,6 @@ class Optimizer:
         if not result.success:
             print()
             print("ERROR: unable to determine next guess with differential evolution")
-            print("  status : {}".format(result.status))
             print("  message: {}".format(result.message))
             exit(-1)
 
@@ -348,7 +345,7 @@ class Optimizer:
         print("  Next guess found")
         print("    value = {}".format(next_guess))
         print("    estimated score = {}".format(float(self._score(next_guess))))
-        print()
+        print(flush=True)
 
         return next_guess
 
@@ -377,7 +374,7 @@ class Optimizer:
 
         # Iterate
         while iteration < self.max_iterations_:
-            print("Starting iteration {}".format(iteration))
+            print("Starting iteration {}".format(iteration), flush=True)
             iteration += 1
 
             best_point = self._best_point()
@@ -385,12 +382,12 @@ class Optimizer:
 
             print("Current best:")
             print("  point: {}".format(best_point))
-            print("  score: {}".format(best_score))
+            print("  score: {}".format(best_score), flush=True)
 
             next_guess = self._next_guess(best_point)
             estimated_score = float(self._score(next_guess))
 
-            print("Verifying next guess")
+            print("Verifying next guess", flush=True)
             next_guess_dict = self._array_to_dict(next_guess)
             valid: bool = self.margin_analysis_.verifier_.verify(next_guess_dict)
 

@@ -1,0 +1,26 @@
+mode="margin"
+
+[parameters]
+Itotal = {nominal = 1}
+Jtotal = {nominal = 1}
+Ltotal = {nominal = 1}
+Rtotal = {nominal = 1}
+LD_margin = {nominal = 1}
+LQ_margin = {nominal = 1}
+LO_margin = {nominal = 1}
+LREL_margin = {nominal = 1}
+J1_margin = {nominal = 1}
+J2_margin = {nominal = 1}
+J3_margin = {nominal = 1}
+J4_margin = {nominal = 1}
+I1_margin = {nominal = 1}
+
+[margin]
+binary_search_steps=12
+scan_steps=2
+
+[verify]
+method="spec_file"
+circuit="dff_josim_tools_optimized.cir"
+file="dff_specification.sp"
+threshold=0.2

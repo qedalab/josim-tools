@@ -17,17 +17,17 @@ class CircuitSimulatorOuput:
     traces_: List[Trace]
     time_steps_: List[float]
 
-    def __init__(self, time_steps, traces: List[Trace]):
+    def __init__(self, time_steps: List[float], traces: List[Trace]):
         self.time_steps_ = time_steps
         self.traces_ = traces
 
     @property
-    def time_steps(self):
+    def time_steps(self) -> List[float]:
         """ Get the time step array """
         return self.time_steps_
 
     @property
-    def traces(self):
+    def traces(self) -> List[Trace]:
         """ Get the list of traces """
         return self.traces_
 
@@ -60,6 +60,7 @@ class PlotParameter:
             self.plot_type == "PHASE"
             or self.plot_type == "DEVI"
             or self.plot_type == "DEVV"
+            or self.plot_type == "DEVP"
         ):
             return self.parameter.upper()
 

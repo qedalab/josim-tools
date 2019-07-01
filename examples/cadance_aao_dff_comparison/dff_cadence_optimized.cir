@@ -1,0 +1,138 @@
+* Cadence DFF testbench
+
+* Junction model
+.param Ic0=0.1m
+.param IcRs=100u*6.859904418
+.param B0Rs=IcRs/Ic0
+.model jjmitll100 jj(rtype=1, vg=2.8mV, cap=0.07pF, r0=160, rn=16, icrit=0.1mA)
+
+* For bias calculations
+.param Itotal=1
+.param Jtotal=1
+.param Ltotal=1
+.param Rtotal=1
+
+.param LD_margin=1
+.param LQ_margin=1
+.param LO_margin=1
+.param LREL_margin=1
+.param J1_margin=1
+.param J2_margin=1
+.param J3_margin=1
+.param J4_margin=1
+.param I1_margin=1
+
+.param RJ1_margin=1
+.param RJ2_margin=1
+.param RJ3_margin=1
+.param RJ4_margin=1
+
+* Parameters
+
+* Cadence AAO Values
+.param LD_unscaled=2.037e-12
+.param LQ_unscaled=6.39e-12
+.param LO_unscaled=4.34e-12
+.param LREL_unscaled=2.092e-12
+.param J1_unscaled=2.392
+.param J2_unscaled=1.766
+.param J3_unscaled=2.234
+.param J4_unscaled=2.479
+.param I1_unscaled=144.9e-6
+
+.param RJ1_unscaled=B0Rs/(J1_unscaled*J1_margin)
+.param RJ2_unscaled=B0Rs/(J2_unscaled*J2_margin)
+.param RJ3_unscaled=B0Rs/(J3_unscaled*J3_margin)
+.param RJ4_unscaled=B0Rs/(J4_unscaled*J4_margin)
+
+* Scaled parameters
+.param LD=LD_unscaled*LD_margin*Ltotal
+.param LQ=LQ_unscaled*LQ_margin*Ltotal
+.param LO=LO_unscaled*LO_margin*Ltotal
+.param LREL=LREL_unscaled*LREL_margin*Ltotal
+
+.param J1=J1_unscaled*J1_margin*Jtotal
+.param J2=J2_unscaled*J2_margin*Jtotal
+.param J3=J3_unscaled*J3_margin*Jtotal
+.param J4=J4_unscaled*J4_margin*Jtotal
+
+.param I1=I1_unscaled*I1_margin*Itotal
+
+.param RJ1=RJ1_unscaled*RJ1_margin*Rtotal
+.param RJ2=RJ2_unscaled*RJ2_margin*Rtotal
+.param RJ3=RJ3_unscaled*RJ3_margin*Rtotal
+.param RJ4=RJ4_unscaled*RJ4_margin*Rtotal
+
+* Helper parameters
+.param LP=0.132e-12
+
+.param JTL_J1=3
+.param JTL_I=250e-6
+.param JTL_RJ1=B0Rs/JTL_J1
+.param JTL_L=3e-13
+.param FluxonVolt=2.067833848e-15/1e-12
+
+.param JUMP=6.283185307179586
+.param JUMP2=2*JUMP
+
+* DFF
+.subckt CADENCE_DFF 1 4 8
+LREL 1 2 LREL
+B3 2 7 jjmitll100 area=J3
+RJ3 2 7 RJ3
+LD 4 5 LD
+B1 5 6 jjmitll100 area=J1
+RJ1 5 6 RJ1
+LQ 6 7 LQ
+LO 7 8 LO
+I1 6 0 pwl(0 0 1p 0 2p I1)
+B2 6 9 jjmitll100 area=J2
+RJ2 6 9 RJ2
+LP2 9 0 LP
+B4 7 10 jjmitll100 area=J4
+RJ4 7 10 RJ4
+LP4 10 0 LP
+.ends CADENCE_DFF
+
+* PTL
+.subckt JTL_STUB 1 3
+L1 1 2 JTL_L
+L2 2 3 JTL_L
+I1 2 0 pwl(0 0 1p 0 2p JTL_I)
+B1 2 0 jjmitll100 area=JTL_J1
+RB1 2 0 JTL_RJ1
+.ends JTL_STUB
+
+* Test setup
+
+* PINREL 1 0 pwl(0 0 59p 0 60p JUMP 79p JUMP 80p JUMP2 )
+VINREL 0 1 pwl(0 0 59p 0 60p FluxonVolt 61p 0 79p 0 80p FluxonVolt 81p 0)
+XINREL1 JTL_STUB 1 3
+XINREL2 JTL_STUB 3 4
+
+* PIND 5 0 pwl(0 0 19p 0 20p JUMP 39p JUMP 40p JUMP2)
+VIND 0 5 pwl(0 0 19p 0 20p FluxonVolt 21p 0 39p 0 40p FluxonVolt 41p 0)
+XIND1 JTL_STUB 5 7
+XIND2 JTL_STUB 7 8
+
+XDUT CADENCE_DFF 4 8 9
+
+XO1 JTL_STUB 9 10
+XO2 JTL_STUB 10 11
+RO 11 0 2
+
+* Simulation
+.tran 0.01p 100p
+
+* Print traces
+*.print PHASE PIND
+*.print PHASE PINREL
+.print PHASE B1|XINREL1
+.print PHASE B1|XINREL2
+.print PHASE B1|XIND1
+.print PHASE B1|XIND2
+.print PHASE B1|XO1
+.print PHASE B1|XO2
+.print PHASE B2|XDUT
+.print PHASE B3|XDUT
+.print PHASE B4|XDUT

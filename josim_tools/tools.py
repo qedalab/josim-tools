@@ -104,7 +104,7 @@ def run() -> None:
 
         print(
             "Yield: {} / {} = {:.1f} %".format(
-                yield_analysis.num_failure(),
+                yield_analysis.num_success(),
                 yield_analysis.num_total(),
                 yield_analysis.percentage() * 100,
             )
