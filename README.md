@@ -2,6 +2,8 @@
 
 JoSIM Tools is a set of tools that does analysis on Superconducting Single Flux Quantum Circuits. JoSIM Tools is built on [JoSIM] and leverages [pyjosim]. The tools currently include verification, margin analysis, yield analysis, and optimization routines.
 
+The full documentation can be found on the [JoSIM Tools Github Pages](https://pleroux0.github.io/josim-tools/)
+
 ## Motivation
 
 Existing tools require specialized format, are difficult to use, are not configurable, are slow, or have shortcoming in the method used.
