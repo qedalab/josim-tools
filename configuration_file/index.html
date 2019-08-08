@@ -764,6 +764,8 @@ margin analysis should be done.</p>
 table is a <a href="#margin-parameter-table">margin parameter table</a> whose key is the
 name of the parameter.</p>
 <h4 id="margin-parameter-table">Margin parameter table</h4>
+<p>A table specifying how a margin parameter should look</p>
+<p>The following </p>
 <h3 id="yield">Yield</h3>
 <p>Does a yield analysis of a circuit.</p>
 <p>Consists of a <a href="#verify-table">verify table</a>, a <a href="#margin-table">yield table</a>,
@@ -803,10 +805,20 @@ performed.</p>
    iteration count. If not specified it defaults to <script type="math/tex">1000</script>.</li>
 </ul>
 <h4 id="optimize-parameters-table">Optimize parameters table</h4>
-<p>A table specifying the parameters to do optimization analysis on. Each entry in the
-table is a <a href="#optimize-parameter-table">optimization parameter table</a> whose key is the
-name of the parameter.</p>
+<p>A table specifying the parameters to do optimization analysis on. Each entry in
+the table is a <a href="#optimize-parameter-table">optimization parameter table</a> whose
+key is the name of the parameter.</p>
 <h4 id="optimize-parameter-table">Optimize parameter table</h4>
+<p>When this method is specified the following table entries are optional:</p>
+<ul>
+<li><strong>search_radius</strong> - How large area should be searched surrounding the
+   current best guess for the next guess. If not specified it defaults to
+   <script type="math/tex">0.05</script> (A <script type="math/tex">5~\%</script> wide square around the nominal values of the current
+   best point). </li>
+<li><strong>converge</strong> - How close the estimated guess score should be to the analysed
+   guess score for converge. If not specified it defaults to <script type="math/tex">0.01</script>
+   (<script type="math/tex">1~\%</script>).</li>
+</ul>
                 
                   
                 
