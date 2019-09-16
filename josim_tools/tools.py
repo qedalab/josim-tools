@@ -10,6 +10,7 @@ from jsonschema import (
     ValidationError as SchemaValidationError,
 )
 
+from . import __version__
 from .verify import Verifier
 from .analysis import MarginAnalysis, print_margin_analysis_result, YieldAnalysis
 from .optimize import Optimizer
@@ -27,6 +28,7 @@ from .configuration import (
 
 def run() -> None:
     """ Run the tool parsing the commandline arguments """
+    print(f"JoSIM {__version__}")
 
     parser = ArgumentParser(description="Circuit tools built on JoSIM")
 

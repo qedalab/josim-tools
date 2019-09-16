@@ -326,7 +326,7 @@ class Optimizer:
         #     self._score, guess_boundaries, workers=-1
         # )
         result: OptimizeResult = differential_evolution(
-            self._cost, guess_boundaries, workers=1
+            self._cost, guess_boundaries, workers=1, popsize=25, maxiter=10000
         )
 
         if self.verbose_:
