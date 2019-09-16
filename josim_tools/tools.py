@@ -28,7 +28,7 @@ from .configuration import (
 
 def run() -> None:
     """ Run the tool parsing the commandline arguments """
-    print(f"JoSIM {__version__}")
+    print(f"JoSIM Tools {__version__}")
 
     parser = ArgumentParser(description="Circuit tools built on JoSIM")
 

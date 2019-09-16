@@ -96,7 +96,7 @@ class CircuitSimulator:
 
     def _load_input(self) -> Input:
         if self.wrspice_compatibility_:
-            input_type = InputType.Wrspice
+            input_type = InputType.WrSpice
         else:
             input_type = InputType.Jsim
 
