@@ -17,6 +17,7 @@ VERIFY = {
                     "file": {"type": "string"},
                     "threshold": {"type": "number"},
                     "circuit": {"type": "string"},
+                    "wrspice_compatibility": {"type": "boolean"},
                 },
                 "additionalProperties": False,
                 "required": ["file", "circuit"],

@@ -3,3 +3,4 @@ pip-wheel-metadata
 .python-version
 .mypy_cache
 __pycache__
+dist

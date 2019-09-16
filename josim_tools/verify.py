@@ -15,6 +15,7 @@ class Verifier:
     simulator_: CircuitSimulator
     spec_file_: SpecFile
     threshold_: float
+    wrspice_compatibility: bool = False
 
     def __init__(self, configuration: VerifyConfiguration):
         assert configuration.method == "spec_file"
@@ -22,6 +23,7 @@ class Verifier:
         self.simulator_ = CircuitSimulator(configuration.circuit_path, [])
         self.spec_file_ = SpecFile(configuration.file_path)
         self.threshold_ = configuration.threshold
+        self.wrspice_compatibility_ = configuration.wrspice_compatibility
 
         # Set traces to be in the right order
         names: List[str] = self.spec_file_.names()

@@ -80,9 +80,11 @@ class CircuitSimulator:
         parameter_names: List[str],
         plot_parameters: Optional[List[PlotParameter]] = None,
         phase_mode: bool = False,
+        wrspice_compatibility: bool = False
     ):
         self.circuit_path_ = circuit_path
         self.phase_mode_ = phase_mode
+        self.wrspice_compatibility_ = wrspice_compatibility
 
         self.input_ = self._load_input()
 
@@ -93,7 +95,10 @@ class CircuitSimulator:
             self.change_traces(plot_parameters)
 
     def _load_input(self) -> Input:
-        input_type = InputType.Jsim
+        if self.wrspice_compatibility_:
+            input_type = InputType.Wrspice
+        else:
+            input_type = InputType.Jsim
 
         if self.phase_mode_:
             analysis_type = AnalysisType.Phase

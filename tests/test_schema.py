@@ -15,7 +15,6 @@ from josim_tools.schema import (
     YIELD_PARAMETER,
     CONFIG,
     OPTIMIZE,
-    OPTIMIZE_HYBRID,
     OPTIMIZE_PARAMETER,
 )
 
@@ -117,7 +116,6 @@ SIMPLE_HYBDRID_OPTIMIZE = {
         YIELD_PARAMETER,
         CONFIG,
         OPTIMIZE_PARAMETER,
-        OPTIMIZE_HYBRID,
         OPTIMIZE,
     ],
 )

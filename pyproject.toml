@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "josim_tools"
-version = "0.1.0"
+version = "1.0.2"
 description = ""
 authors = ["Paul le Roux <pleroux0@outlook.com>"]
 license = "BSD-2-Clause"
