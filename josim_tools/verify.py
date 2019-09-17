@@ -3,10 +3,24 @@
 from typing import Dict, List, Optional
 import matplotlib.pyplot as plt
 import numpy as np
+import attr
 
 from .formats import SpecFile
 from .simulation import CircuitSimulator, CircuitSimulatorOuput, PlotParameter
 from .configuration import VerifyConfiguration
+
+
+@attr.s(auto_attribs=True, frozen=True, slots=True)
+class VerifierResult:
+    """ The result of a verification with optional additional information """
+
+    succeed: bool
+    failure_time: Optional[float] = None
+    failure_point: Optional[List[int]] = None
+
+    def __bool__(self) -> bool:
+        """ Transforms the value into a boolean """
+        return self.succeed
 
 
 class Verifier:
@@ -44,7 +58,7 @@ class Verifier:
         self.simulator_.change_parameters(parameters)
         return self.simulator_.simulate(values)
 
-    def verify(self, params: Optional[Dict[str, float]] = None) -> bool:
+    def verify(self, params: Optional[Dict[str, float]] = None) -> VerifierResult:
         """ Verify if the set of parameters works """
 
         # Manage default parameters
@@ -73,10 +87,14 @@ class Verifier:
 
             difference = np.abs(phase_flips_sampled - phase_flips_compare)
 
-            if np.any(difference > self.threshold_):
-                return False
+            comparisons = difference > self.threshold_
 
-        return True
+            if np.any(comparisons):
+                return VerifierResult(
+                    False, float(time_step), list(np.where(comparisons)[0])
+                )
+
+        return VerifierResult(True)
 
     def plot(self, params: Optional[Dict[str, float]] = None) -> None:
         """ Plot the results and times the circuit is being checked """

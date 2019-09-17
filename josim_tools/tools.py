@@ -54,10 +54,17 @@ def run() -> None:
         verify_configuration = VerifyConfiguration.from_dict(configuration["verify"])
 
         verifier = Verifier(verify_configuration)
-        if verifier.verify():
+        output = verifier.verify()
+
+        if output:
             print("SUCCESS")
         else:
             print("FAILURE")
+            if output.failure_time is not None:
+                print("  TIME  : {}".format(output.failure_time))
+
+            if output.failure_point is not None:
+                print("  POINT : {}".format(output.failure_point))
 
     elif mode == "margin":
         verify_configuration = VerifyConfiguration.from_dict(configuration["verify"])
