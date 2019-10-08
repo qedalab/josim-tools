@@ -129,7 +129,13 @@ class CircuitSimulator:
         # Replace parameter
         parameters = tmp_input.parameters
         for name, value in zip(self.parameter_names_, parameter_values):
-            parameters.replace_unparsed_param(name, value)
+            try:
+                parameters.replace_unparsed_param(name, value)
+            except RuntimeError as re:
+                print(f"ERROR: Failed replacing \"{name}\" with \"{value}\"")
+                print(f"  Reason: {re}")
+                exit(-1)
+
 
         # Setup simulation
         tmp_input.parse_parameters()
