@@ -199,6 +199,28 @@ class CircuitSimulator:
         for plot_parameter in self.plot_parameters_:
             self.input_.add_plot(plot_parameter.to_plot_string())
 
+    def write_file_with_updated_parameters(self, output_file: str, values: List[float]):
+        match_name_regex = re.compile(r"(\s*\.PARAM\s*([^=\s]*)\s*=\s*).*\s*", re.IGNORECASE)
+
+        upper_case_parameters = [param.upper() for param in self.parameter_names_]
+
+        with open(output_file, "w") as output:
+            for line in open(self.circuit_path_).readlines():
+                if line.upper().startswith(".PARAM"):
+                    result = match_name_regex.match(line)
+                    if not result:
+                        print(f"ERROR: Failed parsing parameter string: {line.strip()}")
+                        exit(-1)
+                    name = result.group(2)
+                    name_uppercase = name.upper()
+                    if name_uppercase in upper_case_parameters:
+                        index = upper_case_parameters.index(name_uppercase)
+                        value = values[index]
+                        line = result.group(1) + str(value) + "\n"
+
+
+                output.write(line)
+
     def change_parameters(self, parameter_names: List[str]) -> None:
         """ Modify the parameters that are modified """
         self.parameter_names_ = parameter_names
