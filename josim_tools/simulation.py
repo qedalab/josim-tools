@@ -2,13 +2,12 @@
 
 from typing import List, Optional
 from numpy import interp
+from sys import exit
+import re
 
 import attr
 
-from pyjosim.input import Input, AnalysisType, InputType
-from pyjosim.matrix import Matrix
-from pyjosim.output import Output, Trace
-from pyjosim.simulation import Simulation
+from pyjosim import Input, AnalysisType, InputType, Matrix, Output, Simulation, ParameterName, Trace, Parameter
 
 
 class CircuitSimulatorOuput:
@@ -36,7 +35,7 @@ class CircuitSimulatorOuput:
         samples: List[float] = []
 
         for trace in self.traces:
-            sample = interp(time, self.time_steps, trace.get_data())
+            sample = interp(time, self.time_steps, trace.data)
             samples.append(sample)
 
         return samples
@@ -56,15 +55,15 @@ class PlotParameter:
     def to_trace_name(self) -> str:
         """ Convert plot parameter to trace name """
 
-        if (
-            self.plot_type == "PHASE"
-            or self.plot_type == "DEVI"
-            or self.plot_type == "DEVV"
-            or self.plot_type == "DEVP"
-        ):
-            return self.parameter.upper()
-
-        if self.plot_type == "NODEV":
+        if self.plot_type == "PHASE":
+            return f"P({self.parameter.upper()})"
+        elif self.plot_type == "DEVI":
+            return f"I({self.parameter.upper()})"
+        elif self.plot_type == "DEVV":
+            return f"V({self.parameter.upper()})"
+        elif self.plot_type == "DEVP":
+            return f"V({self.parameter.upper()})"
+        elif self.plot_type == "NODEV":
             return "NV_{}".format(self.parameter.upper())
 
         assert False
@@ -106,12 +105,7 @@ class CircuitSimulator:
             analysis_type = AnalysisType.Voltage
 
         input_object = Input(analysis_type, input_type, False)
-
-        input_object.read_input_file(self.circuit_path_)
-        input_object.split_netlist()
-
-        input_object.expand_subcircuits()
-        input_object.expand_maindesign()
+        input_object.parse_file(self.circuit_path_)
 
         return input_object
 
@@ -121,37 +115,36 @@ class CircuitSimulator:
         # Don't harm our input object
         tmp_input = self.input_.clone()
 
-        # Create objects
-        matrix = Matrix()
-        output = Output()
-        simulation = Simulation()
-
         # Replace parameter
         parameters = tmp_input.parameters
-        for name, value in zip(self.parameter_names_, parameter_values):
-            try:
-                parameters.replace_unparsed_param(name, value)
-            except RuntimeError as re:
-                print(f"ERROR: Failed replacing \"{name}\" with \"{value}\"")
-                print(f"  Reason: {re}")
+
+        for name, value in list(zip(self.parameter_names_, parameter_values))[:11]:
+            parameter_name = ParameterName(name.upper(), "")
+            parameter = Parameter()
+            parameter.set_expression(str(value).upper())
+            if parameter_name in parameters:
+                current_expression = parameters[parameter_name].get_expression()
+                parameters[parameter_name] = parameter
+            else:
+                print(f"ERROR: Failed replacing \"{parameter_name}\" with \"{value}\"")
                 exit(-1)
 
+        parameters = tmp_input.parameters
 
-        # Setup simulation
-        tmp_input.parse_parameters()
-        simulation.identify_simulation(tmp_input)
-        matrix.create_matrix(tmp_input)
+        if len(parameters) > 0:
+            parameters.parse()
 
-        matrix.find_relevant_x(tmp_input)
+        tmp_input.parse_models()
 
-        # Run simulation
-        if self.phase_mode_:
-            simulation.transient_phase_simulation(tmp_input, matrix)
-        else:
-            simulation.transient_voltage_simulation(tmp_input, matrix)
+        netlist = tmp_input.netlist
+        netlist.expand_subcircuits()
+        netlist.expand_maindesign()
 
-        # Gather output
-        output.relevant_traces(tmp_input, matrix, simulation)
+        tmp_input.identify_simulation()
+
+        matrix = Matrix(tmp_input)
+        simulation = Simulation(tmp_input, matrix)
+        output = Output(tmp_input, matrix, simulation)
 
         # Return output
         return output
@@ -160,8 +153,9 @@ class CircuitSimulator:
         """ Simulate and return list of traces """
 
         output = self._raw_simulate(parameter_values)
-        time_steps = output.get_timesteps()
-        traces = output.get_traces()
+        traces = output.traces
+        time_steps = traces[0].data
+        traces = traces[1:]
 
         output_traces = []
 
@@ -188,6 +182,9 @@ class CircuitSimulator:
                 "{} not in {}".format(trace_name, [trace.name for trace in traces])
             )
 
+        for trace, parameter in zip(output_traces, self.plot_parameters_):
+            assert trace.name == parameter.to_trace_name()
+
         return CircuitSimulatorOuput(time_steps, output_traces)
 
     def change_traces(self, plot_parameters: List[PlotParameter]) -> None:
@@ -197,7 +194,7 @@ class CircuitSimulator:
 
         self.plot_parameters_ = plot_parameters
 
-        self.input_.clear_plots()
+        self.input_.clear_all_plots()
 
         for plot_parameter in self.plot_parameters_:
             self.input_.add_plot(plot_parameter.to_plot_string())
