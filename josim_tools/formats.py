@@ -19,7 +19,7 @@ class SpecFile:
         name_line = tokens[0]
         data_lines = tokens[1:]
 
-        if name_line[0] != "time":
+        if name_line[0].lower() != "time":
             raise RuntimeError("Spec file should start with: 'time' names...")
 
         if len(name_line) < 2:
