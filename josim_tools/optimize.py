@@ -417,3 +417,5 @@ class Optimizer:
         print("Optimized:")
         print("  point: {}".format(optimized_point))
         print("  score: {}".format(optimized_score))
+
+        return optimized_point

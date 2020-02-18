@@ -67,6 +67,8 @@ class OptimizeConfiguration:
     converge: float = 0.01
     max_iterations: float = 1000
 
+    output: Optional[str] = None
+
     @classmethod
     def from_dict(cls, value: Dict) -> "OptimizeConfiguration":
         """ Create a optimize configuration """
@@ -79,7 +81,9 @@ class OptimizeConfiguration:
         converge: float = value.get("converge", 0.01)
         max_iterations: float = value.get("max_iterations", 1000)
 
-        return cls(method, search_radius, converge, max_iterations)
+        output: Optional[str] = value.get("output", None)
+
+        return cls(method, search_radius, converge, max_iterations, output)
 
 
 @attr.s(auto_attribs=True, frozen=True, slots=True)

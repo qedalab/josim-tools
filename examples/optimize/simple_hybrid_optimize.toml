@@ -5,6 +5,7 @@ method = "hybrid"
 search_radius = 0.05
 converge = 0.01
 max_iterations = 500
+output = "output/simple_hybrid_optimize.js"
 
 [parameters]
 Btotal = {nominal = 1, min=0.5, max=1.5}

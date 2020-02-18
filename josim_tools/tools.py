@@ -146,9 +146,12 @@ def run() -> None:
         for key, item in optimize_parameters.items():
             optimization_parameters[key] = item.nominal
 
-        optimizer.optimize(optimization_parameters)
+        point = optimizer.optimize(optimization_parameters)
 
-        # TODO do more with the output
+        output_file = optimize_configuration.output
+        if output_file is not None:
+            optimizer.margin_analysis_.verifier_.simulator_.write_file_with_updated_parameters(
+                output_file, point)
     else:
         assert False, "INTERNAL ERROR: UNREACHABLE CODE"
 

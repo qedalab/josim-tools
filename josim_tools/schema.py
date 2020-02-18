@@ -76,6 +76,7 @@ OPTIMIZE = {
                     "search_radius": {"type": "number", "default": 0.05},
                     "converge": {"type": "number", "default": 0.01},
                     "max_iterations": {"type": "integer", "default": 500},
+                    "output": {"type": "string"}
                 },
                 "additionalProperties": False,
             },
