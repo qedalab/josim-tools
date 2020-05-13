@@ -1,2 +1,2 @@
 """ Optimizer for superconducting circuits """
-__version__: str = "1.0.2"
+__version__: str = "1.1.0"
