@@ -62,7 +62,7 @@ class PlotParameter:
         elif self.plot_type == "DEVV":
             return f"V({self.parameter.upper()})"
         elif self.plot_type == "DEVP":
-            return f"V({self.parameter.upper()})"
+            return f"P({self.parameter.upper()})"
         elif self.plot_type == "NODEV":
             return "NV_{}".format(self.parameter.upper())
 
