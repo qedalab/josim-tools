@@ -188,11 +188,12 @@ class Optimizer:
     num_parameters_: int
     num_margin_threads_: int
 
-    verbose_ = True
-    debug_ = True
+    verbose_ = False
+    debug_ = False
 
     keys_: List[str]
     ones_: np.ndarray
+    config: OptimizeConfiguration
 
     def __init__(
         self,
@@ -206,6 +207,7 @@ class Optimizer:
         self.converge_ = optimize_config.converge
         self.search_radius_ = optimize_config.search_radius
         self.max_iterations_ = optimize_config.max_iterations
+        self.config = optimize_config
 
         self.parameters_ = {}
         for key, item in optimize_parameters.items():
@@ -383,6 +385,13 @@ class Optimizer:
             print("Current best:")
             print("  point: {}".format(best_point))
             print("  score: {}".format(best_score), flush=True)
+
+            output_file = self.config.output
+            if output_file is not None:
+                print("Writing current best point to file")
+                self.margin_analysis_.verifier_.simulator_.write_file_with_updated_parameters(
+                    output_file + ".current", best_point
+                )
 
             next_guess = self._next_guess(best_point)
             estimated_score = float(self._score(next_guess))

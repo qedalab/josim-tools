@@ -118,7 +118,7 @@ class CircuitSimulator:
         # Replace parameter
         parameters = tmp_input.parameters
 
-        for name, value in list(zip(self.parameter_names_, parameter_values))[:11]:
+        for name, value in list(zip(self.parameter_names_, parameter_values)):
             parameter_name = ParameterName(name.upper(), "")
             parameter = Parameter()
             parameter.set_expression(str(value).upper())
