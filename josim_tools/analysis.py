@@ -129,11 +129,25 @@ class YieldAnalysis(Yield):
         for _ in range(num_samples):
             parameters: Dict[str, float] = {}
 
-            for key, value in self.distributions_.items():
-                parameters[key] = value.sample()
+            failed = False
 
-            if self.verifier_.verify(parameters):
-                success += 1
+            for key, value in self.distributions_.items():
+                sample = value.sample()
+
+                if sample <= 0:
+                    failed = True
+
+                parameters[key] = sample
+
+            if not failed:
+                try:
+                    if self.verifier_.verify(parameters):
+                        success += 1
+                    else:
+                        failure += 1
+                except:
+                    print("SIMULATION FAILURE", parameters)
+                    raise
             else:
                 failure += 1
 
