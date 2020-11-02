@@ -5,3 +5,5 @@ pip-wheel-metadata
 examples/output/
 __pycache__
 dist
+.vim
+.venv

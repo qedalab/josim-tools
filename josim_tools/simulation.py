@@ -119,7 +119,13 @@ class CircuitSimulator:
         parameters = tmp_input.parameters
 
         for name, value in list(zip(self.parameter_names_, parameter_values)):
-            parameter_name = ParameterName(name.upper(), "")
+            parameter_split = name.upper().split(".", 1)
+            if len(parameter_split) > 1:
+                assert len(parameter_split) == 2
+                parameter_name = ParameterName(parameter_split[0], parameter_split[1])
+            else:
+                assert len(parameter_split) == 1
+                parameter_name = ParameterName(parameter_split[0], "")
             parameter = Parameter()
             parameter.set_expression(str(value).upper())
             if parameter_name in parameters:
